@@ -31,6 +31,8 @@ async def edit_message(message_data: MessageEdit, user_id: int, session: AsyncSe
         if v and k != 'id':
             setattr(message, k, v)
     await session.commit()
+    await message_manager.send_data(message.thread_id,
+                                    jsonable_encoder(MessageResponse.model_validate(jsonable_encoder(message))))
     return message
 
 
