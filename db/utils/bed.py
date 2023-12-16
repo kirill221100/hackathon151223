@@ -49,8 +49,8 @@ async def water_soil(bed_id: int, humidity_percent: float, session: AsyncSession
     if humidity_percent > 100:
         raise HTTPException(400, detail='wrong percent')
     bed = await get_bed_by_id(bed_id, session)
-    if bed.soil_humidity > humidity_percent:
-        raise HTTPException(400, detail='wrong percent')
+    # if bed.soil_humidity > humidity_percent:
+    #     raise HTTPException(400, detail='wrong percent')
     bed.soil_humidity = humidity_percent
     bed.watering_date = datetime.datetime.now()
     await session.commit()
@@ -59,8 +59,8 @@ async def water_soil(bed_id: int, humidity_percent: float, session: AsyncSession
 
 async def fertilize_soil(bed_id: int, fertilize_value: float, session: AsyncSession):
     bed = await get_bed_by_id(bed_id, session)
-    if bed.soil_value > fertilize_value:
-        raise HTTPException(400, detail='wrong value')
+    # if bed.soil_value > fertilize_value:
+    #     raise HTTPException(400, detail='wrong value')
     bed.soil_value = fertilize_value
     await session.commit()
     return status.HTTP_200_OK
@@ -68,15 +68,23 @@ async def fertilize_soil(bed_id: int, fertilize_value: float, session: AsyncSess
 
 async def bed_data_simulation(bed_id: int, session: AsyncSession):
     bed = await get_bed_by_id(bed_id, session)
-    bed.soil_humidity -= 0.4
-    bed.soil_value -= 0.2
-    await session.commit()
-    return {'air_humidity': round(random.uniform(45, 50), 1),
+    if bed.soil_humidity != 0 or bed.soil_value != 0:
+        if bed.soil_humidity >= 0.4:
+            bed.soil_humidity -= 0.4
+        else:
+            bed.soil_humidity = 0.0
+        if bed.soil_value >= 0.2:
+            bed.soil_value -= 0.2
+        else:
+            bed.soil_value = 0.0
+        await session.commit()
+    data = {'air_humidity': round(random.uniform(45, 50), 1),
             'soil_humidity': bed.soil_humidity,
             'soil_value': bed.soil_value,
             'watering_date': bed.watering_date,
             'light_level': random.randint(3500, 5000)
             }
+    return data
 
 # async def bed_data_ws(bed_id: int, ws: WebSocket, session: AsyncSession):
 #     await bed_data_manager.connect(bed_id, ws)
