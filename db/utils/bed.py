@@ -26,9 +26,7 @@ async def get_bed_by_id(bed_id: int, session: AsyncSession):
 
 
 async def get_beds_by_user_id(user_id: int, session: AsyncSession):
-    if res := (await session.execute(select(Bed).filter_by(user_id=user_id).order_by(Bed.id.desc()))).scalars().all():
-        return res
-    raise HTTPException(404, detail='beds not found')
+    return (await session.execute(select(Bed).filter_by(user_id=user_id).order_by(Bed.id.desc()))).scalars().all()
 
 
 async def delete_bed_by_id(bed_id, user_id: int, session: AsyncSession):
