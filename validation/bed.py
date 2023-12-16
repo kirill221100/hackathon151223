@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import enum
 
 
@@ -28,7 +28,7 @@ class BedData(BaseModel):
     plant_id: int
     soil_type: SoilTypes
     soil_value: float
-    soil_humidity: float
+    soil_humidity: float = Field(gt=0, le=100)
 
 
 class BedDataSimulation(BaseModel):
@@ -38,3 +38,12 @@ class BedDataSimulation(BaseModel):
     watering_date: Optional[datetime.datetime]
     light_level: int
 
+
+class WaterSoil(BaseModel):
+    bed_id: int
+    humidity_percent: float = Field(gt=0, le=100)
+
+
+class FertilizeSoil(BaseModel):
+    bed_id: int
+    fertilize_value: float

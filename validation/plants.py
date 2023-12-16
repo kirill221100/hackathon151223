@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import Optional
 import enum
 
 
@@ -14,8 +15,18 @@ class PlantData(BaseModel):
     type: PlantType
     picture: str
     description: str
-    recommended_humidity: float
-    recommended_light_level: int
+    recommended_humidity: float = Field(gt=0, le=100)
+    recommended_light_level: int = Field(gt=0, le=10000)
+
+
+class PlantDataEdit(BaseModel):
+    id: int
+    name: Optional[str] = None
+    type: Optional[PlantType] = None
+    picture: Optional[str] = None
+    description: Optional[str] = None
+    recommended_humidity: Optional[float] = Field(None, gt=0, le=100)
+    recommended_light_level: Optional[int] = Field(None, gt=0, le=10000)
 
 
 # class SoilDefaultValues(enum.Enum):

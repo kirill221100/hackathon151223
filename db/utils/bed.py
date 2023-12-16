@@ -25,7 +25,24 @@ async def create_bed(bed_data: BedData, user_id: int, session: AsyncSession):
 
 
 async def get_bed_by_id(bed_id: int, session: AsyncSession):
-    return (await session.execute(select(Bed).filter_by(id=bed_id))).scalar_one_or_none()
+    if res := (await session.execute(select(Bed).filter_by(id=bed_id))).scalar_one_or_none():
+        return res
+    raise HTTPException(404, detail='bed not found')
+
+
+async def get_beds_by_user_id(user_id: int, session: AsyncSession):
+    if res := (await session.execute(select(Bed).filter_by(user_id=user_id).order_by(Bed.id.desc()))).scalars().all():
+        return res
+    raise HTTPException(404, detail='beds not found')
+
+
+async def delete_bed_by_id(bed_id, user_id: int, session: AsyncSession):
+    bed = await get_bed_by_id(bed_id, session)
+    if bed.user_id != user_id:
+        raise HTTPException(403, detail='you cant delete this bed')
+    await session.delete(bed)
+    await session.commit()
+    return status.HTTP_200_OK
 
 
 async def water_soil(bed_id: int, humidity_percent: float, session: AsyncSession):
