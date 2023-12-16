@@ -10,3 +10,5 @@ class User(Base):
     username = Column(String, unique=True)
     hashed_password = Column(String)
     beds = relationship('Bed', back_populates='user')
+    threads = relationship('Thread', back_populates='user')
+    messages = relationship('Message', back_populates='user')

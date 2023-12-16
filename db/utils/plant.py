@@ -8,7 +8,9 @@ from validation.plants import PlantData, PlantDataEdit
 
 async def create_plant(plant_data: PlantData, session: AsyncSession):
     try:
-        plant = Plant(name=plant_data.name, type=plant_data.type, recommended_humidity=plant_data.recommended_humidity)
+        plant = Plant(name=plant_data.name, type=plant_data.type, recommended_humidity=plant_data.recommended_humidity,
+                      description=plant_data.description, recommended_light_level=plant_data.recommended_light_level,
+                      picture=plant_data.picture)
         session.add(plant)
         await session.commit()
         return plant

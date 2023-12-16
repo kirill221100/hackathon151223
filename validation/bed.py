@@ -28,7 +28,14 @@ class BedData(BaseModel):
     plant_id: int
     soil_type: SoilTypes
     soil_value: float
-    soil_humidity: float = Field(gt=0, le=100)
+    soil_humidity: float = Field(ge=0, le=100)
+    watering_date: Optional[datetime.datetime] = None
+
+
+class BedResponse(BedData):
+    id: int
+    plant_id: int
+    user_id: int
 
 
 class BedDataSimulation(BaseModel):

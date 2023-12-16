@@ -19,6 +19,10 @@ class PlantData(BaseModel):
     recommended_light_level: int = Field(gt=0, le=10000)
 
 
+class PLantResponse(PlantData):
+    id: int
+
+
 class PlantDataEdit(BaseModel):
     id: int
     name: Optional[str] = None

@@ -1,16 +1,11 @@
-import asyncio
 import datetime
-import json
 import random
-from websockets.exceptions import ConnectionClosedOK
-from fastapi import HTTPException, status, WebSocket, WebSocketDisconnect
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
-from validation.bed import BedData, SoilDefaultValues, SoilTypes
+from validation.bed import BedData
 from db.models.bed import Bed
 from db.utils.user import get_user_by_id
-from utils.ws import bed_data_manager
 from db.utils.plant import get_plant_by_id
 
 
@@ -18,7 +13,7 @@ async def create_bed(bed_data: BedData, user_id: int, session: AsyncSession):
     user = await get_user_by_id(user_id, session)
     plant = await get_plant_by_id(bed_data.plant_id, session)
     bed = Bed(user=user, plant=plant, soil_type=bed_data.soil_type, soil_value=bed_data.soil_value,
-              soil_humidity=bed_data.soil_humidity)
+              soil_humidity=bed_data.soil_humidity, watering_date=bed_data.watering_date)
     session.add(bed)
     await session.commit()
     return bed
