@@ -75,17 +75,17 @@ async def fertilize_soil(bed_id: int, fertilize_value: float, user_id: int, sess
 
 
 async def bed_data_simulation(bed_id: int, session: AsyncSession):
-    bed = await get_bed_by_id(bed_id, session)
-    if bed.soil_humidity != 0 or bed.soil_value != 0:
-        if bed.soil_humidity >= 0.4:
-            bed.soil_humidity -= 0.4
-        else:
-            bed.soil_humidity = 0.0
-        if bed.soil_value >= 0.2:
-            bed.soil_value -= 0.2
-        else:
-            bed.soil_value = 0.0
-        await session.commit()
+    bed = await get_bed_by_id_with_plant(bed_id, session)
+    if bed.soil_humidity <= bed.plant.recommended_humidity * 0.7:
+        bed.soil_humidity = bed.plant.recommended_humidity
+    else:
+        bed.soil_humidity -= 0.4
+    if bed.soil_value >= 0.2:
+        bed.soil_value -= 0.2
+    else:
+        bed.soil_value = 0.0
+    await session.commit()
+
     data = {'air_humidity': round(random.uniform(45, 50), 1),
             'soil_humidity': bed.soil_humidity,
             'soil_value': bed.soil_value,
