@@ -1,6 +1,6 @@
 import datetime
 from typing import Optional
-
+from validation.plants import PLantResponse
 from pydantic import BaseModel, Field
 import enum
 
@@ -36,6 +36,10 @@ class BedResponse(BedData):
     id: int
     plant_id: int
     user_id: int
+
+
+class NewBedResponse(BedResponse):
+    plant: PLantResponse
 
 
 class BedDataSimulation(BaseModel):

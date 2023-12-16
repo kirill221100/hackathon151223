@@ -24,6 +24,12 @@ async def get_plant_by_id(plant_id: int, session: AsyncSession):
     raise HTTPException(404, detail='plant not found')
 
 
+async def get_plants(page: int, per_page: int, session: AsyncSession):
+    limit = per_page * page
+    offset = (page - 1) * per_page
+    return (await session.execute(select(Plant).limit(limit).offset(offset))).scalars().all()
+
+
 async def delete_plant_by_id(plant_id: int, session: AsyncSession):
     plant = await get_plant_by_id(plant_id, session)
     await session.delete(plant)

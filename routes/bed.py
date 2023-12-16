@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from typing import List
-from validation.bed import BedData, BedDataSimulation, BedResponse
+from validation.bed import BedData, BedDataSimulation, BedResponse, NewBedResponse
 from security.oauth import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.db_setup import get_session
@@ -10,7 +10,7 @@ from db.utils.bed import create_bed, water_soil, fertilize_soil, bed_data_simula
 bed_router = APIRouter()
 
 
-@bed_router.post('/new-bed', response_model=BedResponse)
+@bed_router.post('/new-bed', response_model=NewBedResponse)
 async def new_bed(bed_data: BedData, user=Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     return await create_bed(bed_data, user['id'], session)
 
