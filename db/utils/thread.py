@@ -44,6 +44,13 @@ async def edit_thread(thread_data: ThreadDataEdit, user_id: int, session: AsyncS
     return thread
 
 
+async def get_threads(page: int, per_page: int, session: AsyncSession):
+    limit = per_page * page
+    offset = (page - 1) * per_page
+    threads = (await session.execute(select(Thread).limit(limit).offset(offset))).scalars().all()
+    return threads
+
+
 async def delete_thread_by_id(thread_id: int, user_id: int, session: AsyncSession):
     thread = await get_thread_by_id(thread_id, session)
     if thread.user_id != user_id:
