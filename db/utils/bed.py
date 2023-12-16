@@ -13,7 +13,7 @@ from db.utils.plant import get_plant_by_id
 async def create_bed(bed_data: BedData, user_id: int, session: AsyncSession):
     user = await get_user_by_id(user_id, session)
     plant = await get_plant_by_id(bed_data.plant_id, session)
-    bed = Bed(user=user, plant=plant, soil_type=bed_data.soil_type, soil_value=bed_data.soil_value,
+    bed = Bed(user=user, name=bed_data.name, plant=plant, soil_type=bed_data.soil_type, soil_value=bed_data.soil_value,
               soil_humidity=bed_data.soil_humidity, watering_date=bed_data.watering_date)
     session.add(bed)
     await session.commit()

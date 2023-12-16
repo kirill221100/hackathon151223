@@ -25,6 +25,7 @@ class SoilTypes(enum.Enum):
 
 
 class BedData(BaseModel):
+    name: str
     plant_id: int
     soil_type: SoilTypes
     soil_value: float

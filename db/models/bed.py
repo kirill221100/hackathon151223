@@ -8,6 +8,7 @@ from db.db_setup import Base
 class Bed(Base):
     __tablename__ = 'beds'
     id = Column(Integer, primary_key=True)
+    name = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship('User', back_populates='beds')
     plant_id = Column(Integer, ForeignKey('plants.id'))
