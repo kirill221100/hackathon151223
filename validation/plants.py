@@ -4,10 +4,10 @@ import enum
 
 
 class PlantType(enum.Enum):
-    fruit = 'фрукт'
-    vegetable = 'овощ'
-    tree = 'дерево'
-    other = 'другое'
+    fruit = 'fruit'
+    vegetable = 'vegetable'
+    tree = 'tree'
+    other = 'other'
 
 
 class PlantData(BaseModel):

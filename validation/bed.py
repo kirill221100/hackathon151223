@@ -16,12 +16,12 @@ class SoilDefaultValues(enum.Enum):
 
 
 class SoilTypes(enum.Enum):
-    sod_podzolic = 'дерново-подзолистая'
-    grey_forest = 'серая лесная'
-    chernozem = 'чернозём'
-    light_chestnut = 'светло-каштановая'
-    red_soil = 'краснозём'
-    gray_soil = 'серозём'
+    sod_podzolic = 'sod-podzolic'
+    grey_forest = 'grey forest'
+    chernozem = 'chernozem'
+    light_chestnut = 'light-chestnut'
+    red_soil = 'red soil'
+    gray_soil = 'gray soil'
 
 
 class BedData(BaseModel):
