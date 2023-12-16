@@ -36,6 +36,10 @@ async def get_beds_by_user_id(user_id: int, session: AsyncSession):
     return (await session.execute(select(Bed).filter_by(user_id=user_id).order_by(Bed.id.desc()))).scalars().all()
 
 
+async def get_beds_by_user_id_with_plant(user_id: int, session: AsyncSession):
+    return (await session.execute(select(Bed).filter_by(user_id=user_id).options(selectinload(Bed.plant)).order_by(Bed.id.desc()))).scalars().all()
+
+
 async def delete_bed_by_id(bed_id, user_id: int, session: AsyncSession):
     bed = await get_bed_by_id(bed_id, session)
     if bed.user_id != user_id:
