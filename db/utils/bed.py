@@ -45,10 +45,12 @@ async def delete_bed_by_id(bed_id, user_id: int, session: AsyncSession):
     return status.HTTP_200_OK
 
 
-async def water_soil(bed_id: int, humidity_percent: float, session: AsyncSession):
+async def water_soil(bed_id: int, humidity_percent: float, user_id: int, session: AsyncSession):
     if humidity_percent > 100:
         raise HTTPException(400, detail='wrong percent')
     bed = await get_bed_by_id(bed_id, session)
+    if bed.user_id != user_id:
+        raise HTTPException(403, detail='you cant water this bed')
     # if bed.soil_humidity > humidity_percent:
     #     raise HTTPException(400, detail='wrong percent')
     bed.soil_humidity = humidity_percent
@@ -57,8 +59,10 @@ async def water_soil(bed_id: int, humidity_percent: float, session: AsyncSession
     return status.HTTP_200_OK
 
 
-async def fertilize_soil(bed_id: int, fertilize_value: float, session: AsyncSession):
+async def fertilize_soil(bed_id: int, fertilize_value: float, user_id: int, session: AsyncSession):
     bed = await get_bed_by_id(bed_id, session)
+    if bed.user_id != user_id:
+        raise HTTPException(403, detail='you cant fertilize this bed')
     # if bed.soil_value > fertilize_value:
     #     raise HTTPException(400, detail='wrong value')
     bed.soil_value = fertilize_value

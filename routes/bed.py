@@ -16,13 +16,13 @@ async def new_bed(bed_data: BedData, user=Depends(get_current_user), session: As
 
 
 @bed_router.patch('/water-soil/{bed_id}')
-async def water_soil_path(bed_id: int, humidity_percent: float, session: AsyncSession = Depends(get_session)):
-    return await water_soil(bed_id, humidity_percent, session)
+async def water_soil_path(bed_id: int, humidity_percent: float, user=Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    return await water_soil(bed_id, humidity_percent, user['id'], session)
 
 
 @bed_router.patch('/fertilize-soil/{bed_id}')
-async def fertilize_soil_path(bed_id: int, fertilize_value: float, session: AsyncSession = Depends(get_session)):
-    return await fertilize_soil(bed_id, fertilize_value, session)
+async def fertilize_soil_path(bed_id: int, fertilize_value: float, user=Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    return await fertilize_soil(bed_id, fertilize_value, user['id'], session)
 
 
 @bed_router.delete('/delete-bed-by-id/{bed_id}')
