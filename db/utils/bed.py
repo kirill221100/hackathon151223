@@ -3,6 +3,7 @@ import random
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from validation.bed import BedData
 from db.models.bed import Bed
 from db.utils.user import get_user_by_id
@@ -21,6 +22,12 @@ async def create_bed(bed_data: BedData, user_id: int, session: AsyncSession):
 
 async def get_bed_by_id(bed_id: int, session: AsyncSession):
     if res := (await session.execute(select(Bed).filter_by(id=bed_id))).scalar_one_or_none():
+        return res
+    raise HTTPException(404, detail='bed not found')
+
+
+async def get_bed_by_id_with_plant(bed_id: int, session: AsyncSession):
+    if res := (await session.execute(select(Bed).filter_by(id=bed_id).options(selectinload(Bed.plant)))).scalar_one_or_none():
         return res
     raise HTTPException(404, detail='bed not found')
 

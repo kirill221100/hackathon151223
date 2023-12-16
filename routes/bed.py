@@ -5,7 +5,7 @@ from security.oauth import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.db_setup import get_session
 from db.utils.bed import create_bed, water_soil, fertilize_soil, bed_data_simulation, delete_bed_by_id, get_bed_by_id, \
-    get_beds_by_user_id
+    get_beds_by_user_id, get_bed_by_id_with_plant
 
 bed_router = APIRouter()
 
@@ -35,9 +35,9 @@ async def get_beds_by_user_id_path(user=Depends(get_current_user), session: Asyn
     return await get_beds_by_user_id(user['id'], session)
 
 
-@bed_router.get('/get-bed-by-id/{bed_id}', response_model=BedResponse)
+@bed_router.get('/get-bed-by-id/{bed_id}', response_model=NewBedResponse)
 async def get_bed_by_id_path(bed_id: int, session: AsyncSession = Depends(get_session)):
-    return await get_bed_by_id(bed_id, session)
+    return await get_bed_by_id_with_plant(bed_id, session)
 
 
 @bed_router.patch('/bed-data-simulation/{bed_id}', response_model=BedDataSimulation)
